@@ -24,12 +24,12 @@ mongoose.connect(process.env.MONGO_URL);
 // Define routes
 // GET /api/users: Retrieve all users with pagination support.
 app.get("/api/users", async (req, res) => {
-  const { page = 1, limit = 20 } = req.query; // Change limit to 20
-  const users = await User.find()
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .exec();
-  res.json(users);
+  const { page = 1, limit = 10 } = req.query;
+  const users = await User.find().exec();
+  const start = (page - 1) * limit;
+  const end = page * limit;
+  const paginatedUsers = users.slice(start, end);
+  res.json(paginatedUsers);
 });
 
 // GET /api/users/:id: Retrieve a specific user by ID.
