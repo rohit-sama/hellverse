@@ -1,4 +1,7 @@
 const UserCard = ({ user, team, setTeam, modal, success }) => {
+  const isSelected = team.some(teamUser => teamUser._id === user._id);
+  const userCardClass = isSelected ? 'opacity-50' : '';
+
   // Function to add a user to the team
   const addToTeam = (user) => {
     success()
@@ -10,7 +13,8 @@ const UserCard = ({ user, team, setTeam, modal, success }) => {
       )
     ) {
       setTeam([...team, user]);
-      modal()
+    }else {
+      alert("Cant select this user as it has same domain and availability as another user in the team.")
     }
   };
 
@@ -18,12 +22,12 @@ const UserCard = ({ user, team, setTeam, modal, success }) => {
   const removeFromTeam = (userId) => {
     success()
     setTeam(team.filter((user) => user._id !== userId));
-    modal()
   };
 
   // Function to create the team
 
   return (
+    <div className={`user-card ${userCardClass}`}>
     <div className="w-64 h-80 rounded-lg overflow-hidden shadow-md border border-gray-100  m-4">
       <div className="px-6 py-4">
         <div className="font-bold flex justify-start items-center text-xl mb-2">
@@ -63,6 +67,7 @@ const UserCard = ({ user, team, setTeam, modal, success }) => {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };
