@@ -30,7 +30,7 @@ function App() {
 
   const createTeam = async () => {
     if (team.length > 0 && teamName !== "") {
-      const res = await axios.post("http://localhost:4000/api/team", {
+      const res = await axios.post("https://api-heliverse.vercel.app/api/team", {
         name: teamName,
         users: team.map((user) => user._id),
       });
@@ -43,7 +43,7 @@ function App() {
   useEffect(() => {
     const fetchUsers = async () => {
       const res = await axios.get(
-        `http://localhost:4000/api/users?page=${page}&limit=20`
+        `https://api-heliverse.vercel.app/api/users?page=${page}&limit=20`
       );
       setUsers(res.data);
     };
