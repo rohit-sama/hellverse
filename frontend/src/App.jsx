@@ -137,7 +137,7 @@ function App() {
             <div>
               <p>Team created successfully!</p>
               <h2>Created Team</h2>
-              <div className="flex">
+              <div className="flex max-md:flex-col">
               {team.map((user) => (
                 <div className="border border-gray-200 p-2 rounded-md m-2" key={user._id}>
                   <b>
@@ -169,7 +169,7 @@ function App() {
               >
                 Create team
               </button>
-              <div className="flex">
+              <div className="flex max-md:flex-col">
               {team.map((user) => (
                 <div className="border border-gray-200 p-2 rounded-md m-2" key={user._id}>
                   <b>
@@ -197,6 +197,7 @@ function App() {
               team={team}
               setTeam={setTeam}
               modal={openModal}
+              success={setSuccess}
             />
           </div>
         ))}

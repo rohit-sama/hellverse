@@ -1,6 +1,7 @@
-const UserCard = ({ user, team, setTeam, modal }) => {
+const UserCard = ({ user, team, setTeam, modal, success }) => {
   // Function to add a user to the team
   const addToTeam = (user) => {
+    success()
     if (
       !team.some(
         (teamUser) =>
@@ -15,6 +16,7 @@ const UserCard = ({ user, team, setTeam, modal }) => {
 
   // Function to remove a user from the team
   const removeFromTeam = (userId) => {
+    success()
     setTeam(team.filter((user) => user._id !== userId));
     modal()
   };
