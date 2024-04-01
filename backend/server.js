@@ -26,17 +26,13 @@ mongoose.connect(process.env.MONGO_URL);
 app.get("/api/users", async (req, res) => {
   const { page = 1, limit = 20, search = "", domain, gender, availability } = req.query;
 
-  let users = await User.find()
-    .limit(limit * 1)
-    .skip((page - 1) * limit)
-    .exec();
+  let users = await User.find().exec();
 
-  if (search) {
+
     const regex = new RegExp('^' + search, 'i'); // 'i' makes it case insensitive
     users = users.filter(user => 
       user.first_name.match(regex) || user.last_name.match(regex)
     );
-  }
 
   if (domain) {
     users = users.filter(user => user.domain === domain);
@@ -50,8 +46,11 @@ app.get("/api/users", async (req, res) => {
     const isAvailable = availability === "true";
     users = users.filter(user => user.available === isAvailable);
   }
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const paginatedUsers = users.slice(startIndex, endIndex);
 
-  res.json(users);
+  res.json(paginatedUsers);
 });
 
 // GET /api/users/:id: Retrieve a specific user by ID.
