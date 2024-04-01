@@ -23,13 +23,34 @@ app.use(
 mongoose.connect(process.env.MONGO_URL);
 
 // Define routes
-// GET /api/users: Retrieve all users with pagination support.
 app.get("/api/users", async (req, res) => {
-  const { page = 1, limit = 20 } = req.query; // Change limit to 20
-  const users = await User.find()
+  const { page = 1, limit = 20, search = "", domain, gender, availability } = req.query;
+
+  let users = await User.find()
     .limit(limit * 1)
     .skip((page - 1) * limit)
     .exec();
+
+  if (search) {
+    const regex = new RegExp('^' + search, 'i'); // 'i' makes it case insensitive
+    users = users.filter(user => 
+      user.first_name.match(regex) || user.last_name.match(regex)
+    );
+  }
+
+  if (domain) {
+    users = users.filter(user => user.domain === domain);
+  }
+
+  if (gender) {
+    users = users.filter(user => user.gender === gender);
+  }
+
+  if (availability) {
+    const isAvailable = availability === "true";
+    users = users.filter(user => user.available === isAvailable);
+  }
+
   res.json(users);
 });
 
@@ -62,6 +83,12 @@ app.post("/api/team", async (req, res) => {
 app.get("/api/team/:id", async (req, res) => {
   const team = await Team.findById(req.params.id);
   res.json(team);
+});
+
+// GET /api/team: Retrieve a list of all teams.
+app.get("/api/team", async (req, res) => {
+  const teams = await Team.find();
+  res.json(teams);
 });
 
 // Test route
